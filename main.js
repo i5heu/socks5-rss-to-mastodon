@@ -62,7 +62,11 @@ async function postToMastodon(item) {
 
     const formData = new FormData();
 
-    formData.append("status", "Check out this article: " + "https://qr2tor.net/" + encodeURIComponent(item.link));
+    let text = "Check out this article: " + "https://qr2tor.net/" + encodeURIComponent(item.link) + "\n" + item.title + "\n" + item.contentSnippet;
+    text = text.slice(0, 498);
+    text += "…";
+
+    formData.append("status", text);
 
     const optionsMastodon = {
         hostname: 'mastodon.social',
