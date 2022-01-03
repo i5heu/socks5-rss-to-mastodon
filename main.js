@@ -103,33 +103,3 @@ function isAlreadyPosted(item) {
 function writePostInFile(item) {
     fs.writeFileSync('postedUrls.txt', item.link + "\n", { flag: 'a+' });
 }
-
-/**
- * Estimate the content length of (multipart/form-data) encoded form data
- * object (sent in HTTP POST requests).
- * We do not know if you can get the actual content length.
- * Hence, it is estimated by this function.
- * As soon as {@link https://stackoverflow.com/q/62281752/1065654 this}
- * question is answered (correctly), the correct calculation should be used.
- *
- * @param formData
- */
-function estimateContentLength(formData) {
-    // Seems to be 44 in WebKit browsers (e.g. Chrome, Safari, etc.),
-    // but varies at least in Firefox.
-    const baseLength = 50; // estimated max value
-    // Seems to be 87 in WebKit browsers (e.g. Chrome, Safari, etc.),
-    // but varies at least in Firefox.
-    const separatorLength = 115; // estimated max value
-    let length = baseLength;
-    const entries = formData.entries();
-    for (const [key, value] of entries) {
-        length += key.length + separatorLength;
-        if (typeof value === 'object') {
-            length += value.size;
-        } else {
-            length += String(value).length;
-        }
-    }
-    return length;
-}
